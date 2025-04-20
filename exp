@@ -1,0 +1,633 @@
+1A. intro to da lib in py and r(colab)
+import pandas as pd
+url = 'https://gist.githubusercontent.com/seankross/a412dfbd88b3db70b74b/raw/5f23f993cd87c283ce766e7ac6b329ee7cc2e1d1/mtcars.csv'
+try:
+    df = pd.read_csv(url)  
+except pd.errors.ParserError:
+    # If the above fails, try to handle extra commas within a field using 'error_bad_lines=False'
+    df = pd.read_csv(url, on_bad_lines='skip') # skip bad lines
+print(df)
+mtcars = pd.DataFrame(data)
+
+filtered_data = mtcars[mtcars['mpg'] > 20]
+print(filtered_data)
+
+selected_data = mtcars[['mpg']]
+print(selected_data)
+
+mutated_data = df.copy()
+mutated_data['wt_kg'] = df['wt'] * 453.592 / 1000
+print(mutated_data)
+
+arranged_data = df.sort_values(by='mpg', ascending=False)
+print(arranged_data)
+
+summary_data = pd.DataFrame({'avg_mpg': [df['mpg'].mean()]})
+print(summary_data)
+
+grouped_data = df.groupby('cyl')['mpg'].mean().reset_index(name='avg_mpg')
+print(grouped_data)
+
+renamed_data = df.rename(columns={'mpg': 'miles_per_gallon'})
+print(renamed_data)
+
+distinct_data = df[['cyl', 'gear']].drop_duplicates()
+print(distinct_data)
+
+sliced_data = df.iloc[:5]
+print(sliced_data)
+
+data1 = df.iloc[:5]
+data2 = df.iloc[5:10]
+combined_rows = pd.concat([data1, data2])
+print(combined_rows)
+combined_cols = pd.concat([data1.reset_index(drop=True), data2.reset_index(drop=True)], axis=1)
+print(combined_cols)
+
+data1_join = pd.DataFrame({'id': [1,2,3], 'value1': ['A','B','C']})
+data2_join = pd.DataFrame({'id': [2,3,4], 'value2': ['X','Y','Z']})
+joined_data = pd.merge(data1_join, data2_join, on='id', how='inner')
+print(joined_data)
+
+result = df[df['mpg'] > 20].groupby('cyl')['hp'].mean().reset_index(name='avg_hp')
+print(result)
+
+plt.scatter(df['hp'], df['mpg'])
+plt.title('Horsepower vs. MPG')
+plt.xlabel('Horsepower')
+plt.ylabel('Miles per Gallon')
+plt.show()
+
+tidy_data = pd.DataFrame({'id': [1,2,3], 'year_2023': [10,15,20], 'year_2024': [25,30,35]})
+tidy_data = tidy_data.melt(id_vars=['id'], var_name='year', value_name='value')
+print(tidy_data)
+
+dt = df.copy()
+result_dt = dt.groupby('cyl')['mpg'].mean().reset_index(name='mean_mpg')
+print(result_dt)
+
+!pip install scikit-learn
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+X = df[['hp', 'wt']]
+y = df['mpg']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
+model = LinearRegression()
+model.fit(X_train, y_train)
+print(model.coef_, model.intercept_)
+
+(R)
+library(dplyr) 
+filtered_data <- mtcars %>% 
+filter(mpg > 20) 
+print(filtered_data)
+selected_data <- mtcars %>% 
+select(mpg, hp) 
+print(selected_data) 
+# Add a new column for weight in kilograms (wt is in 1000 lbs) 
+library(dplyr) 
+mutated_data <- mtcars %>% 
+mutate(wt_kg = wt * 453.592 / 1000) 
+print(mutated_data) 
+# Arrange rows by mpg in descending order 
+arranged_data <- mtcars %>% 
+arrange(desc(mpg)) 
+print(arranged_data)
+# Calculate average mpg 
+summary_data <- mtcars %>% 
+summarize(avg_mpg = mean(mpg)) 
+print(summary_data) 
+# Group by number of cylinders and calculate average mpg for each group 
+grouped_data <- mtcars %>% 
+group_by(cyl) %>% 
+summarize(avg_mpg = mean(mpg)) 
+print(grouped_data) 
+# Rename the mpg column to miles_per_gallon 
+renamed_data <- mtcars %>% 
+rename(miles_per_gallon = mpg) 
+print(renamed_data) 
+# Find distinct combinations of cylinders and gears 
+distinct_data <- mtcars %>% 
+distinct(cyl, gear) 
+print(distinct_data) 
+# Select the first 5 rows 
+sliced_data <- mtcars %>% 
+slice(1:5) 
+print(sliced_data) 
+# Combine datasets by rows 
+data1 <- mtcars[1:5, ] 
+data2 <- mtcars[6:10, ] 
+combined_data <- bind_rows(data1, data2) 
+print(combined_data) 
+# Join datasets based on common columns 
+data1 <- data.frame(id = 1:3, value1 = c("A", "B", "C")) 
+data2 <- data.frame(id = 2:4, value2 = c("X", "Y", "Z")) 
+joined_data <- inner_join(data1, data2, by = "id") 
+print(joined_data) 
+# Chain filter, group_by, and summarize 
+library(dplyr) 
+result <- mtcars %>% 
+filter(mpg > 20) %>% 
+group_by(cyl) %>% 
+summarize(avg_hp = mean(hp)) 
+print(result) 
+library(ggplot2) 
+# Scatter plot of mpg vs. hp 
+ggplot(mtcars, aes(x = hp, y = mpg)) + geom_point() + labs(title = "Horsepower vs. MPG", x = 
+"Horsepower", y = "Miles per Gallon") 
+library(tidyr) 
+# Sample messy dataset 
+data <- data.frame( id = 1:3, year_2023 = c(10, 15, 20), year_2024 = c(25, 30, 35) ) 
+# Transform data to a tidy format 
+tidy_data <- data %>% pivot_longer(cols = starts_with("year"), names_to = "year", values_to = 
+"value") 
+print(tidy_data) 
+library(data.table) 
+# Create a data.table 
+data <- data.table(mtcars) 
+# Calculate mean mpg by number of cylinders 
+result <- data[, .(mean_mpg = mean(mpg)), by = cyl] 
+print(result) 
+library(caret) 
+# Splitting data into training and testing sets 
+data <- mtcars 
+set.seed(123) 
+trainIndex <- createDataPartition(data$mpg, p = 0.8, list = FALSE) 
+train_data <- data[trainIndex, ] 
+test_data <- data[-trainIndex, ] 
+# Train a linear regression model 
+model <- train(mpg ~ hp + wt, data = train_data, method = "lm") 
+print(summary(model)) 
+
+1B.libraries in python for data analytics
+import pandas as pd
+data = {'Name': ['Alice', 'Bob', 'Charlie'], 'Age': [25, 30, 35]}
+df = pd.DataFrame(data)
+filtered_df = df[df['Age'] > 25]
+print(filtered_df)
+
+import numpy as np
+arr = np.array([1, 2, 3, 4, 5])
+mean_value = np.mean(arr)
+print(mean_value)
+
+import matplotlib.pyplot as plt
+x = [1, 2, 3, 4, 5]
+y = [2, 4, 6, 8, 10]
+plt.plot(x, y)
+plt.title("Line Plot")
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.show()
+
+import seaborn as sns
+import pandas as pd
+data = {'A': [1, 2, 3, 4], 'B': [2, 3, 4, 5]}
+df = pd.DataFrame(data)
+sns.scatterplot(x='A', y='B', data=df)
+
+from sklearn.linear_model import LinearRegression
+import numpy as np
+X = np.array([[1], [2], [3], [4]])
+y = np.array([2.2, 4.3, 6.1, 8.0])
+model = LinearRegression()
+model.fit(X, y)
+prediction = model.predict([[5]])
+print(prediction)
+
+from scipy.stats import norm# Calculate the probability density of a normal distribution
+x = 1
+prob_density = norm.pdf(x, loc=0, scale=1)
+print(prob_density)
+
+import plotly.express as px
+data = {'Name': ['Alice', 'Bob', 'Charlie'], 'Score': [85, 90, 95]}
+fig = px.bar(data, x='Name', y='Score', title='Student Scores')
+fig.show()
+
+import statsmodels.api as sm
+X = [1, 2, 3, 4]
+y = [2.2, 4.3,6.1, 8.0]
+X = sm.add_constant(X)
+model = sm.OLS(y, X).fit()
+print(model.summary())
+
+!pip install --upgrade numpy
+!pip install --upgrade tensorflow
+import tensorflow as tf 
+tensor = tf.constant([1, 2, 3]) 
+print(tensor)
+from google.colab.patches import cv2_imshow
+!curl -o logo.png https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW9h4fU35Nb2lGTCcT-GS1pVkWd5gqV0yegw&usqp=CAU
+import cv2
+img = cv2.imread('logo.png', cv2.IMREAD_UNCHANGED)
+# Convert the image to uint8 before displaying to avoid recursion error
+img = img.astype(np.uint8)  
+cv2_imshow(img)
+
+
+2.SIMPLE LINEAR REGRESSION IN PYTHON
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+X = np.array([[1], [2], [3], [4], [5]])
+y = np.array([1, 2, 3, 4, 5])  # Target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LinearRegression()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print(f"Intercept: {model.intercept_}")
+print(f"Coefficient: {model.coef_}")
+plt.scatter(X, y, color='blue', label='Data points')
+plt.plot(X, model.predict(X), color='red', label='Regression line')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.legend()
+plt.show()
+
+3.MULTIPLE LINEAR REGRESSION IN R
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+data = {
+ 'X1': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
+ 'X2': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 
+ 'Y': [1.1, 1.9, 3.1, 4.2, 5.1, 6.2, 7.1, 8.0, 9.0, 10.1]
+ }
+df = pd.DataFrame(data)
+X = df[['X1', 'X2']] 
+Y = df['Y'] 
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+model = LinearRegression()
+model.fit(X_train, Y_train)
+Y_pred = model.predict(X_test)
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)
+mse = mean_squared_error(Y_test, Y_pred)
+r2 = r2_score(Y_test, Y_pred)
+print("Mean Squared Error:", mse)
+print("R^2 Score:", r2)
+plt.figure(figsize=(10, 6))
+plt.subplot(1, 2, 1)
+plt.scatter(df['X1'], df['Y'], color='blue', label='Actual data')
+plt.plot(df['X1'], model.predict(df[['X1', 'X2']]), color='red', label='Fitted line')
+plt.xlabel('X1')
+plt.ylabel('Y')
+plt.title('X1 vs Y')
+plt.legend()
+plt.subplot(1, 2, 2)
+plt.scatter(df['X2'], df['Y'], color='green', label='Actual data')
+plt.plot(df['X2'], model.predict(df[['X1', 'X2']]), color='red', label='Fitted line')
+plt.xlabel('X2')
+plt.ylabel('Y')
+plt.title('X2 vs Y')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+4. time series analysis in python/r
+import pandas as pd 
+import numpy as np 
+import matplotlib.pyplot as plt 
+# Sample time series data 
+np.random.seed(42) 
+data = np.random.randn(100).cumsum() # Simulated stock price data 
+# Convert to Pandas DataFrame 
+df = pd.DataFrame(data, columns=['Price']) 
+# Compute 10-day,20-day,2-day Moving Averages 
+df['SMA_10'] = df['Price'].rolling(window=10).mean() 
+df['SMA_20'] = df['Price'].rolling(window=20).mean() 
+df['SMA_2'] = df['Price'].rolling(window=2).mean() 
+# Plot the results 
+plt.figure(figsize=(12, 6)) 
+plt.plot(df['Price'], label="Price", linestyle='dotted', color='black') 
+plt.plot(df['SMA_10'], label="10-day SMA", color='blue') 
+plt.plot(df['SMA_20'], label="20-day SMA", color='red') 
+plt.plot(df['SMA_2'], label="2-day SMA", color='yellow') 
+plt.legend() 
+plt.title("Moving Averages") 
+plt.show() 
+
+
+5. implementation of arima model in python
+# 1. Uninstall the old pmdarima
+!pip uninstall -y pmdarima
+# 2. Pin NumPy to a known-compatible version, then reinstall pmdarima
+!pip install --upgrade --force-reinstall numpy==1.23.5 pmdarima
+# 3. After installation completes, you must restart the Colab runtime:
+import os
+os._exit(00)
+import numpy as np 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+import statsmodels.api as sm 
+from statsmodels.tsa.stattools import adfuller 
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf 
+from statsmodels.tsa.arima.model import ARIMA 
+import pmdarima as pm # Auto-ARIMA 
+# Generate Sample Time Series Data (Replace with Actual Data) 
+np.random.seed(42) 
+data = np.cumsum(np.random.randn(100)) # Simulated non-stationary data 
+# Convert to Pandas DataFrame 
+df = pd.DataFrame(data, columns=['Value']) 
+# Step 1: ADF Test to Check Stationarity 
+def adf_test(series): 
+    result = adfuller(series.dropna()) 
+    print(f'ADF Statistic: {result[0]}') 
+    print(f'p-value: {result[1]}') 
+    return result[1] # Return p-value 
+# Determine Differencing Order (d) 
+p_value = adf_test(df['Value']) 
+d = 0 
+diff_series = df['Value'].copy() 
+while p_value > 0.05 and d < 2: 
+    diff_series = diff_series.diff().dropna() 
+    d += 1 
+    p_value = adf_test(diff_series) 
+print(f"Optimal differencing order (d): {d}") 
+#Step 2: Plot ACF & PACF to Determine p and q 
+plt.figure(figsize=(12, 5)) 
+plt.subplot(121) 
+plot_acf(diff_series.dropna(), ax=plt.gca(), lags=20) 
+plt.subplot(122) 
+plot_pacf(diff_series.dropna(), ax=plt.gca(), lags=20) 
+plt.show() 
+# Step 3: Use Auto-ARIMA with Constraints 
+auto_arima_model = pm.auto_arima( 
+    diff_series.dropna(), 
+    seasonal=False, 
+    stepwise=True, 
+    trace=True, 
+    max_p=3, 
+    max_q=3, 
+    max_d=2, 
+    start_p=1, # Prevent (0,0,0) 
+    start_q=1, # Prevent (0,0,0) 
+    suppress_warnings=True 
+) 
+p, d, q = auto_arima_model.order 
+print(f"Best (p, d, q): ({p}, {d}, {q})") 
+# Step 4: Ensure p and q Are Not Both 0 
+if p == 0 and q == 0: 
+    print("Auto-ARIMA chose (0,0,0), adjusting to (1,0,1) to avoid flat line.") 
+    p, q = 1, 1 
+# Step 5: Fit ARIMA Model 
+model = ARIMA(df['Value'].dropna(), order=(p, d, q)) 
+model_fit = model.fit() 
+# Step 6: Forecasting 
+forecast_steps = 5 
+forecast = model_fit.forecast(steps=forecast_steps) 
+# Step 7: Avoid Flat Forecast (Adjust if Needed) 
+last_value = df['Value'].iloc[-1] 
+if abs(forecast.iloc[0] - last_value) > 2 * df['Value'].std(): 
+    print("Forecast is too far from last observed value. Consider adjusting (p, q).") 
+# Plot Forecast 
+plt.figure(figsize=(10, 5)) 
+plt.plot(df['Value'], label="Original Data") 
+plt.plot(range(len(df), len(df) + forecast_steps), forecast, label="Forecast", color='red') 
+plt.legend() 
+plt.title("ARIMA Forecast with Optimized (p, d, q)") 
+plt.show()
+
+
+6.Text analytics: Implementation of Spam filter/Sentiment analysis in python/R.
+# import libraries 
+import pandas as pd 
+import nltk 
+from nltk.sentiment.vader import SentimentIntensityAnalyzer 
+from nltk.corpus import stopwords 
+from nltk.tokenize import word_tokenize 
+from nltk.stem import WordNetLemmatizer 
+# download nltk corpus (first time only) 
+import nltk 
+nltk.download('all') 
+# Load the amazon review dataset 
+df = pd.read_csv('https://raw.githubusercontent.com/pycaret/pycaret/master/datasets/amazon.csv') 
+df 
+# create preprocess_text function 
+def preprocess_text(text): 
+# Tokenize the text 
+    tokens = word_tokenize(text.lower()) 
+    # Remove stop words 
+    filtered_tokens = [token for token in tokens if token not in stopwords.words('english')] 
+    # Lemmatize the tokens 
+    lemmatizer = WordNetLemmatizer() 
+    lemmatized_tokens = [lemmatizer.lemmatize(token) for token in filtered_tokens] 
+    # Join the tokens back into a string 
+    processed_text = ' '.join(lemmatized_tokens) 
+    return processed_text 
+# apply the function df 
+df['reviewText'] = df['reviewText'].apply(preprocess_text) 
+df 
+# initialize NLTK sentiment analyzer 
+analyzer = SentimentIntensityAnalyzer() 
+# create get_sentiment function 
+def get_sentiment(text): 
+    scores = analyzer.polarity_scores(text) 
+    sentiment = 1 if scores['pos'] > 0 else 0 
+    return sentiment 
+# apply get_sentiment function 
+df['sentiment'] = df['reviewText'].apply(get_sentiment) 
+df 
+from sklearn.metrics import confusion_matrix 
+print(confusion_matrix(df['Positive'], df['sentiment'])) 
+from sklearn.metrics import classification_report 
+print(classification_report(df['Positive'], df['sentiment'])) 
+
+7. Perform (EDA) using R by importing, cleaning, visualizing data and understand data (na,summary,plot,hist,boxplot)
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv('/content/Iris.csv')
+print(df.head())
+print("\nMissing Values:")
+print(df.isnull().sum().sum())
+df = df.dropna()
+# Replace 'sepal.length' with 'SepalLengthCm'
+df['SepalLengthCm'] = df['SepalLengthCm'].fillna(df['SepalLengthCm'].mean()) 
+print("\nSummary Statistics:")
+print(df.describe())
+cor_matrix = df.iloc[:, 0:4].corr()
+plt.figure(figsize=(8,6))
+sns.heatmap(cor_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+plt.title("Correlation Matrix")
+plt.show()
+plt.figure(figsize=(8, 5))
+# Replace 'sepal.length' with 'SepalLengthCm'
+plt.hist(df['SepalLengthCm'], bins=np.arange(df['SepalLengthCm'].min(), df['SepalLengthCm'].max() + 0.1, 0.1), 
+         color='skyblue', edgecolor='black')  
+plt.title("Histogram of Sepal Length")
+plt.xlabel("Sepal Length")
+plt.ylabel("Frequency")
+plt.show()
+
+(R/JUPY)
+> library(ggcorrplot) 
+> library(ggplot2) 
+> library(dplyr) 
+> library(tidyr) 
+> library(summarytools) 
+> library(ggcorrplot) 
+> setwd("/home/a/aman/") 
+> data <- read.csv("iris.csv") 
+> head(data) 
+> #checking for missing values 
+> sum(is.na(data)) 
+> #remove rows with missing values 
+> data <-na.omit(data) 
+> data$sepal.length[is.na(data$sepal.length)]<-mean(data$sepal.length,na.rm= TRUE) 
+> summary(data) 
+> #visualizing data 
+> #correlation plot 
+> cor_matrix<-cor(data[,1:4]) 
+> ggcorrplot(cor_matrix,lab = TRUE, title= "Correlation Matrix")
+> ggplot(data, aes(x = sepal.length)) + 
++ geom_histogram(binwidth = 0.1, fill = "skyblue", color = "black") + 
++ labs(title = "Histogram of Sepal Length", x = "Sepal Length", y = "Frequency")
+
+
+8. relationships between multiple variables using visualizations and correlation analysis in R for better data interpretation. 
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+iris = pd.read_csv('/content/Iris.csv')
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x='SepalLengthCm', y='PetalLengthCm', hue='Species', data=iris) 
+plt.title('Scatter Plot of Sepal Length vs Petal Length')
+plt.show()
+sns.pairplot(iris, hue='Species')
+plt.show()
+numeric_columns = ['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']  
+cor_matrix = iris[numeric_columns].corr()
+print(cor_matrix)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cor_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title('Correlation Heatmap')
+plt.show()
+pearson_corr = iris['SepalLengthCm'].corr(iris['PetalLengthCm'])  
+print(f"Pearson Correlation between Sepal.Length and Petal.Length: {pearson_corr}")
+
+9.data analysis essential Python libraries (Pandas and NumPy)importing, manipulating, and summarizing datasets through descriptive statistics. 
+import pandas as pd
+import numpy as np
+from google.colab import files
+df = pd.read_csv('/content/Simulated.csv')
+print("Loaded Dataset:")
+print(df.head())
+df['BMI'] = df['Weight'] / (df['Height'] / 100) ** 2
+print("\nData Info (Data types, non-null counts):")
+df.info()
+print("\nSummary Statistics:")
+print(df.describe())
+print("\nMissing Values (null counts):")
+print(df.isnull().sum())
+df_older_than_30 = df[df['Age'] > 30]
+print("\nFiltered Data (Age > 30):")
+print(df_older_than_30)
+print("\nDescriptive Statistics (Mean, Median, Mode):")
+mean_values = df.mean(numeric_only=True)
+median_values = df.median(numeric_only=True)
+mode_values = df.mode().iloc[0]
+print("Mean Values:")
+print(mean_values)
+print("\nMedian Values:")
+print(median_values)
+print("\nMode Values:")
+print(mode_values)
+print("\nStandard Deviations and Variances using NumPy:")
+cols = ['Age', 'Height', 'Income', 'Weight', 'BMI']
+std_devs = np.std(df[cols], axis=0)
+variances = np.var(df[cols], axis=0)
+percentiles_25 = {col: np.percentile(df[col], 25) for col in cols}
+percentiles_75 = {col: np.percentile(df[col], 75) for col in cols}
+print("Standard Deviations:")
+print(std_devs)
+print("\nVariances:")
+print(variances)
+print("\n25th Percentiles:")
+print(percentiles_25)
+print("\n75th Percentiles:")
+print(percentiles_75)
+print("\nCorrelation Matrix:")
+numeric_df = df.select_dtypes(include=['number'])  
+print(numeric_df.corr())
+print("\nCovariance Matrix:")
+print(numeric_df.cov())
+ages_first_7 = df['Age'].values[:7]
+print("\nFirst 7 Ages:")
+print(ages_first_7)
+age_array = df['Age'].values.reshape(-1, 1)
+print("\nReshaped Age Array:")
+print(age_array)
+salary_array = df['Income'].values
+concatenated_data = np.column_stack((age_array, salary_array))
+print("\nConcatenated Age and Salary:")
+print(concatenated_data)
+
+
+10.visualizations histograms, bar charts, pie charts, box plots,violin plots,regression plots using Matplotlib, Seaborn for effective data representation. 
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+import pandas as pd 
+import numpy as np 
+df = sns.load_dataset('tips') 
+# Or create a random dataset for visualization purposes 
+np.random.seed(0) 
+data = np.random.randn(100) 
+# Matplotlib Histogram 
+plt.hist(df['total_bill'], bins=20, edgecolor='black') 
+plt.title('Histogram of Total Bill') 
+plt.xlabel('Total Bill') 
+plt.ylabel('Frequency') 
+plt.show() 
+# Seaborn Histogram 
+sns.histplot(df['total_bill'], kde=True) 
+plt.title('Histogram of Total Bill with KDE') 
+plt.show() 
+# Matplotlib Bar Chart 
+categories = df['day'].value_counts().index 
+counts = df['day'].value_counts() 
+plt.bar(categories, counts, color='skyblue') 
+plt.title('Bar Chart of Days') 
+plt.xlabel('Days') 
+plt.ylabel('Count') 
+plt.show() 
+# Seaborn Bar Chart 
+sns.countplot(data=df, x='day', palette='coolwarm') 
+plt.title('Bar Chart of Days using Seaborn') 
+plt.show() 
+# Matplotlib Pie Chart 
+category_counts = df['day'].value_counts() 
+plt.pie(category_counts, labels=category_counts.index, autopct='%1.1f%%', 
+colors=sns.color_palette('pastel')) 
+plt.title('Pie Chart of Days') 
+plt.show() 
+# Matplotlib Box Plot 
+plt.boxplot(df['total_bill'], vert=False) 
+plt.title('Box Plot of Total Bill') 
+plt.xlabel('Total Bill') 
+plt.show() 
+# Seaborn Box Plot 
+sns.boxplot(data=df, x='total_bill', palette='Set2') 
+plt.title('Box Plot of Total Bill using Seaborn') 
+plt.show() 
+# Matplotlib Violin Plot (custom) 
+plt.violinplot(df['total_bill']) 
+plt.title('Violin Plot of Total Bill') 
+plt.xlabel('Total Bill') 
+plt.show() 
+# Seaborn Violin Plot 
+sns.violinplot(data=df, x='day', y='total_bill', palette='muted') 
+plt.title('Violin Plot of Total Bill by Day') 
+plt.show() 
+# Seaborn Regression Plot 
+sns.regplot(x='total_bill', y='tip', data=df, scatter_kws={'s': 50}, line_kws={'color': 'red'}) 
+plt.title('Regression Plot of Total Bill vs Tip') 
+plt.show() 
