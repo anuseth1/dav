@@ -1,5 +1,8 @@
 1A. intro to da lib in py and r(colab)
+!pip install pandas
+!pip install matplotlib
 import pandas as pd
+import matplotlib.pyplot as plt # Corrected the import statement from matplotlib.pylot to matplotlib.pyplot
 url = 'https://gist.githubusercontent.com/seankross/a412dfbd88b3db70b74b/raw/5f23f993cd87c283ce766e7ac6b329ee7cc2e1d1/mtcars.csv'
 try:
     df = pd.read_csv(url)  
@@ -7,7 +10,7 @@ except pd.errors.ParserError:
     # If the above fails, try to handle extra commas within a field using 'error_bad_lines=False'
     df = pd.read_csv(url, on_bad_lines='skip') # skip bad lines
 print(df)
-mtcars = pd.DataFrame(data)
+mtcars = pd.DataFrame(df)
 
 filtered_data = mtcars[mtcars['mpg'] > 20]
 print(filtered_data)
@@ -78,87 +81,87 @@ model.fit(X_train, y_train)
 print(model.coef_, model.intercept_)
 
 (R)
-library(dplyr) 
-filtered_data <- mtcars %>% 
-filter(mpg > 20) 
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(data.table)
+library(caret)
+filtered_data <- mtcars %>%
+  filter(mpg > 20)
 print(filtered_data)
-selected_data <- mtcars %>% 
-select(mpg, hp) 
-print(selected_data) 
-# Add a new column for weight in kilograms (wt is in 1000 lbs) 
-library(dplyr) 
-mutated_data <- mtcars %>% 
-mutate(wt_kg = wt * 453.592 / 1000) 
-print(mutated_data) 
-# Arrange rows by mpg in descending order 
-arranged_data <- mtcars %>% 
-arrange(desc(mpg)) 
+selected_data <- mtcars %>%
+  select(mpg, hp)
+print(selected_data)
+mutated_data <- mtcars %>%
+  mutate(wt_kg = wt * 453.592 / 1000)
+print(mutated_data)
+arranged_data <- mtcars %>%
+  arrange(desc(mpg))
 print(arranged_data)
-# Calculate average mpg 
-summary_data <- mtcars %>% 
-summarize(avg_mpg = mean(mpg)) 
-print(summary_data) 
-# Group by number of cylinders and calculate average mpg for each group 
-grouped_data <- mtcars %>% 
-group_by(cyl) %>% 
-summarize(avg_mpg = mean(mpg)) 
-print(grouped_data) 
-# Rename the mpg column to miles_per_gallon 
-renamed_data <- mtcars %>% 
-rename(miles_per_gallon = mpg) 
-print(renamed_data) 
-# Find distinct combinations of cylinders and gears 
-distinct_data <- mtcars %>% 
-distinct(cyl, gear) 
-print(distinct_data) 
-# Select the first 5 rows 
-sliced_data <- mtcars %>% 
-slice(1:5) 
-print(sliced_data) 
-# Combine datasets by rows 
-data1 <- mtcars[1:5, ] 
-data2 <- mtcars[6:10, ] 
-combined_data <- bind_rows(data1, data2) 
-print(combined_data) 
-# Join datasets based on common columns 
-data1 <- data.frame(id = 1:3, value1 = c("A", "B", "C")) 
-data2 <- data.frame(id = 2:4, value2 = c("X", "Y", "Z")) 
-joined_data <- inner_join(data1, data2, by = "id") 
-print(joined_data) 
-# Chain filter, group_by, and summarize 
-library(dplyr) 
-result <- mtcars %>% 
-filter(mpg > 20) %>% 
-group_by(cyl) %>% 
-summarize(avg_hp = mean(hp)) 
-print(result) 
-library(ggplot2) 
-# Scatter plot of mpg vs. hp 
-ggplot(mtcars, aes(x = hp, y = mpg)) + geom_point() + labs(title = "Horsepower vs. MPG", x = 
-"Horsepower", y = "Miles per Gallon") 
-library(tidyr) 
-# Sample messy dataset 
-data <- data.frame( id = 1:3, year_2023 = c(10, 15, 20), year_2024 = c(25, 30, 35) ) 
-# Transform data to a tidy format 
-tidy_data <- data %>% pivot_longer(cols = starts_with("year"), names_to = "year", values_to = 
-"value") 
-print(tidy_data) 
-library(data.table) 
-# Create a data.table 
-data <- data.table(mtcars) 
-# Calculate mean mpg by number of cylinders 
-result <- data[, .(mean_mpg = mean(mpg)), by = cyl] 
-print(result) 
-library(caret) 
-# Splitting data into training and testing sets 
-data <- mtcars 
-set.seed(123) 
-trainIndex <- createDataPartition(data$mpg, p = 0.8, list = FALSE) 
-train_data <- data[trainIndex, ] 
-test_data <- data[-trainIndex, ] 
-# Train a linear regression model 
-model <- train(mpg ~ hp + wt, data = train_data, method = "lm") 
-print(summary(model)) 
+summary_data <- mtcars %>%
+  summarize(avg_mpg = mean(mpg))
+print(summary_data)
+grouped_data <- mtcars %>%
+  group_by(cyl) %>%
+  summarize(avg_mpg = mean(mpg))
+print(grouped_data)
+renamed_data <- mtcars %>%
+  rename(miles_per_gallon = mpg)
+print(renamed_data)
+distinct_data <- mtcars %>%
+  distinct(cyl, gear)
+print(distinct_data)
+sliced_data <- mtcars %>%
+  slice(1:5)
+print(sliced_data)
+data1 <- mtcars[1:5, ]
+data2 <- mtcars[6:10, ]
+combined_data <- bind_rows(data1, data2)
+print(combined_data)
+data1 <- data.frame(id = 1:3, value1 = c("A", "B", "C"))
+data2 <- data.frame(id = 2:4, value2 = c("X", "Y", "Z"))
+joined_data <- inner_join(data1, data2, by = "id")
+print(joined_data)
+result <- mtcars %>%
+  filter(mpg > 20) %>%
+  group_by(cyl) %>%
+  summarize(avg_hp = mean(hp))
+print(result)
+ggplot(mtcars, aes(x = hp, y = mpg)) +
+  geom_point() +
+  labs(
+    title = "Horsepower vs. MPG",
+    x     = "Horsepower",
+    y     = "Miles per Gallon"
+  )
+wide_data <- data.frame(
+  id         = 1:3,
+  year_2023  = c(10, 15, 20),
+  year_2024  = c(25, 30, 35)
+)
+tidy_data <- wide_data %>%
+  pivot_longer(
+    cols      = starts_with("year"),
+    names_to  = "year",
+    values_to = "value"
+  )
+print(tidy_data)
+dt <- data.table(mtcars)
+dt_result <- dt[, .(mean_mpg = mean(mpg)), by = cyl]
+print(dt_result)
+set.seed(123)
+trainIndex <- createDataPartition(mtcars$mpg, p = 0.8, list = FALSE)
+train_data <- mtcars[trainIndex, ]
+test_data  <- mtcars[-trainIndex, ]
+model <- train(
+  mpg ~ hp + wt,
+  data   = train_data,
+  method = "lm"
+)
+print(model)
+ 
+install.packages(c("dplyr","ggplot2","tidyr","data.table","caret"))
+run-Rscript exp.R
 
 1B.libraries in python for data analytics
 import pandas as pd
@@ -226,6 +229,19 @@ img = cv2.imread('logo.png', cv2.IMREAD_UNCHANGED)
 img = img.astype(np.uint8)  
 cv2_imshow(img)
 
+#for vscode all same only last one different 
+pip install numpy matplotlib seaborn pandas sklearn scripy plotly statsmodels tensorflow opencv-python 
+import cv2
+import urllib.request
+import numpy as np
+url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW9h4fU35Nb2lGTCcT-GS1pVkWd5gqV0yegw&usqp=CAU"
+urllib.request.urlretrieve(url, "logo.png")
+img = cv2.imread('logo.png', cv2.IMREAD_UNCHANGED)
+# Convert the image to uint8 before displaying to avoid recursion error
+img = img.astype(np.uint8)
+cv2.imshow('Image', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 2.SIMPLE LINEAR REGRESSION IN PYTHON
 import numpy as np
@@ -395,6 +411,45 @@ plt.legend()
 plt.title("ARIMA Forecast with Optimized (p, d, q)") 
 plt.show()
 
+VSCODE-
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.stattools import adfuller
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv"
+data = pd.read_csv(url, header=0, parse_dates=[0], index_col=0, date_parser=pd.to_datetime)
+data.plot()
+plt.title("Monthly Airline Passengers")
+plt.xlabel("Date")
+plt.ylabel("Number of Passengers")
+plt.show()
+def adf_test(series):
+    result = adfuller(series, autolag='AIC')
+    print(f"ADF Statistic: {result[0]}")
+    print(f"p-value: {result[1]}")
+    if result[1] <= 0.05:
+        print("Series is stationary")
+    else:
+        print("Series is not stationary")
+adf_test(data)
+data_diff = data.diff().dropna()
+plot_acf(data_diff)
+plot_pacf(data_diff)
+plt.show()
+model = ARIMA(data, order=(1, 1, 1))
+model_fit = model.fit()
+print(model_fit.summary())
+forecast = model_fit.forecast(steps=12)
+plt.plot(data, label='Historical Data')
+plt.plot(pd.date_range(start=data.index[-1], periods=13, freq='M')[1:], forecast, label='Forecast', color='red')
+plt.title("Airline Passengers Forecast")
+plt.xlabel("Date")
+plt.ylabel("Number of Passengers")
+plt.legend()
+plt.show()
+
 
 6.Text analytics: Implementation of Spam filter/Sentiment analysis in python/R.
 # import libraries 
@@ -440,6 +495,9 @@ print(confusion_matrix(df['Positive'], df['sentiment']))
 from sklearn.metrics import classification_report 
 print(classification_report(df['Positive'], df['sentiment'])) 
 
+vscode-pip install nltk 
+       pip install sentiment vader 
+
 7. Perform (EDA) using R by importing, cleaning, visualizing data and understand data (na,summary,plot,hist,boxplot)
 import pandas as pd
 import numpy as np
@@ -468,29 +526,30 @@ plt.xlabel("Sepal Length")
 plt.ylabel("Frequency")
 plt.show()
 
+vscode-df = pd.read_csv(r'C:\Users\DELL\OneDrive\Desktop\D properties\dav\Iris.csv')
+
 (R/JUPY)
-> library(ggcorrplot) 
-> library(ggplot2) 
-> library(dplyr) 
-> library(tidyr) 
-> library(summarytools) 
-> library(ggcorrplot) 
-> setwd("/home/a/aman/") 
-> data <- read.csv("iris.csv") 
-> head(data) 
-> #checking for missing values 
-> sum(is.na(data)) 
-> #remove rows with missing values 
-> data <-na.omit(data) 
-> data$sepal.length[is.na(data$sepal.length)]<-mean(data$sepal.length,na.rm= TRUE) 
-> summary(data) 
-> #visualizing data 
-> #correlation plot 
-> cor_matrix<-cor(data[,1:4]) 
-> ggcorrplot(cor_matrix,lab = TRUE, title= "Correlation Matrix")
-> ggplot(data, aes(x = sepal.length)) + 
-+ geom_histogram(binwidth = 0.1, fill = "skyblue", color = "black") + 
-+ labs(title = "Histogram of Sepal Length", x = "Sepal Length", y = "Frequency")
+library(ggcorrplot)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(summarytools)
+setwd("")
+data <- read.csv("iris.csv")
+head(data)
+sum(is.na(data))
+data <- na.omit(data)
+data$sepal.length[is.na(data$sepal.length)] <- mean(data$sepal.length, na.rm = TRUE)
+summary(data)
+cor_matrix <- cor(data[, 1:4])
+ggcorrplot(cor_matrix, lab = TRUE, title = "Correlation Matrix")
+ggplot(data, aes(x = sepal.length)) +
+  geom_histogram(binwidth = 0.1, fill = "skyblue", color = "black") +
+  labs(
+    title = "Histogram of Sepal Length",
+    x     = "Sepal Length",
+    y     = "Frequency"
+  )
 
 
 8. relationships between multiple variables using visualizations and correlation analysis in R for better data interpretation. 
@@ -513,6 +572,63 @@ plt.title('Correlation Heatmap')
 plt.show()
 pearson_corr = iris['SepalLengthCm'].corr(iris['PetalLengthCm'])  
 print(f"Pearson Correlation between Sepal.Length and Petal.Length: {pearson_corr}")
+
+vscode-import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+df = pd.read_csv(r'C:\Users\DELL\OneDrive\Desktop\D properties\dav\Iris.csv')
+plt.figure(figsize=(8, 6))
+sns.scatterplot(x='SepalLengthCm', y='PetalLengthCm', hue='Species', data=df) 
+plt.title('Scatter Plot of Sepal Length vs Petal Length')
+plt.show()
+sns.pairplot(df, hue='Species')
+plt.show()
+numeric_columns = ['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']  
+cor_matrix = df[numeric_columns].corr()
+print(cor_matrix)
+plt.figure(figsize=(8, 6))
+sns.heatmap(cor_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title('Correlation Heatmap')
+plt.show()
+pearson_corr = df['SepalLengthCm'].corr(df['PetalLengthCm'])  
+print(f"Pearson Correlation between Sepal.Length and Petal.Length: {pearson_corr}")
+
+R-
+library(ggplot2)
+library(corrplot)
+library(GGally)
+data(iris)
+ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+    geom_point() +
+    labs(
+        title = "Scatter Plot of Sepal Length vs Petal Length"
+    ) +
+    theme_minimal()
+ggpairs(
+    iris,
+    aes(color = Species)
+)
+cor_matrix <- cor(iris[, 1:4])
+print(cor_matrix)
+corrplot(
+    cor_matrix,
+    method = "circle",
+    type = "upper",
+    title = "Correlation Heatmap",
+    tl.cex = 0.8,
+    tl.col = "black"
+)
+pearson_corr <- cor(
+    iris$Sepal.Length,
+    iris$Petal.Length
+)
+print(
+    paste(
+        "Pearson Correlation between Sepal.Length and Petal.Length:",
+        pearson_corr
+    )
+)
+
 
 9.data analysis essential Python libraries (Pandas and NumPy)importing, manipulating, and summarizing datasets through descriptive statistics. 
 import pandas as pd
@@ -570,6 +686,8 @@ salary_array = df['Income'].values
 concatenated_data = np.column_stack((age_array, salary_array))
 print("\nConcatenated Age and Salary:")
 print(concatenated_data)
+
+vscode-df = pd.read_csv(r'C:\Users\DELL\OneDrive\Desktop\D properties\dav\Simulated.csv')
 
 
 10.visualizations histograms, bar charts, pie charts, box plots,violin plots,regression plots using Matplotlib, Seaborn for effective data representation. 
